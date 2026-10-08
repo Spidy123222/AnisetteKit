@@ -32,7 +32,7 @@ let unicornLinkerSettings: [LinkerSetting] = [
 let package = Package(
     name: "AnisetteKit",
     platforms: [
-        .iOS(.v15),
+        .iOS(.v14),
         .macOS(.v12)
     ],
     products: [
