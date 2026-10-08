@@ -11,18 +11,26 @@ import Foundation
 public struct AnisetteHeadersDTO: Sendable, Equatable {
     public var dictionary: [String: String]
     public var isCaseSensitive: Bool
-
+    nonisolated(unsafe) private static let isoFormatter = ISO8601DateFormatter()
     public init(dictionary: [String: String] = [:], isCaseSensitive: Bool = false) {
         self.dictionary = dictionary
         self.isCaseSensitive = isCaseSensitive
     }
 
     private static func formatISO8601Date(_ date: Date) -> String {
-        date.formatted(.iso8601)
+        if #available(iOS 15.0, *) {
+            return date.formatted(.iso8601)
+        } else {
+            return isoFormatter.string(from: date)
+        }
     }
 
     private static func parseISO8601Date(_ dateString: String) -> Date? {
-        try? Date(dateString, strategy: .iso8601)
+        if #available(iOS 15.0, *) {
+            return try? Date(dateString, strategy: .iso8601)
+        } else {
+            return isoFormatter.date(from: dateString)
+        }
     }
 
     public init(headers: AnisetteRequestHeaders) {
